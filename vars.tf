@@ -5,9 +5,6 @@ variable "namespace" {
 variable "workdir" {
 }
 
-variable "db_password" {
-}
-
 variable "default_cpu_request" {
   default = "null"
 }

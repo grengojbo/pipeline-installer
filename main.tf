@@ -42,6 +42,10 @@ locals {
   hasCloudinfo  = lookup(lookup(local.values, "cloudinfo", {}), "enabled", "false")
 
   defaultStorageBackend = lookup(local.values, "defaultStorageBackend", "postgres")
+  
+  rootDatabaseHost = lookup(local.values, "rootDatabaseHost", "none")
+  rootDatabasePassword = lookup(local.values, "rootDatabasePassword", "root")
+  rootDatabaseUser = lookup(local.values, "rootDatabaseUser", "postgres")
 
   database = {
     host = lookup(lookup(local.databaseInfo, local.defaultStorageBackend, "{}"), "host", "")

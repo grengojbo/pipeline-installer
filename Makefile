@@ -12,7 +12,7 @@ endif
 
 WORKSPACE ?= default
 IMAGE ?= banzaicloud/pipeline-installer
-TTAG=$(shell cat ./VERSION)
+TAG ?= $(shell cat ./VERSION)
 
 .PHONY: list
 list: ## List all make targets
@@ -50,6 +50,9 @@ terraform-apply: terraform-init ## Run terraform apply
 db-init-postgresql: ## Initialize PostgreSQL DataBase
 	@echo "\nYour selected workspace is '${WORKSPACE}'\n"
 
-shell: ## Run Local end connect to shell
+pull: ## Docker image pull ${IMAGE}:${TAG}
+	docker pull ${IMAGE}:${TAG}
+
+shell: pull ## Run Local end connect to shell
 	@echo "\nYour selected workspace is '${WORKSPACE}'\nCureent DIR ${PROJECT_DIR}\n"
-	docker run --rm --net=host --user=502 -ti -v ${HOME}/.banzai/pipeline/${WORKSPACE}:/workspace -v ${PROJECT_DIR}:/terraform -e KUBECONFIG docker.io/banzaicloud/pipeline-installer:latest sh
+	docker run --rm --net=host --user=${UID} -ti -v ${HOME}/.banzai/pipeline/${WORKSPACE}:/workspace -v ${PROJECT_DIR}:/terraform -e KUBECONFIG  sh

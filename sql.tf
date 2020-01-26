@@ -77,3 +77,17 @@ data "template_file" "vault-mysql" {
     password = "${random_string.vault-db-password.result}"
   }
 }
+
+# resource "null_resource" "db_init" {
+#   count   = local.rootDatabaseHost ? 1 : 0
+#   provisioner "local-exec" {
+#     command = "psql -h $RDS_DB_HOST -U $DB_USER -f "
+
+#     environment = {
+#       PGPASSWORD = local.rootDatabasePassword
+#       RDS_DB_HOST = local.rootDatabaseHost
+#       DB_USER = local.rootDatabaseUser
+#       SQL_FILE = data.template_file.vault-postgres
+#     }
+#   }
+# }
