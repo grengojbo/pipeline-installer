@@ -1,0 +1,102 @@
+image:
+  tag: "${image_tag}"
+  pullPolicy: "Always"
+worker:
+  resources:
+    requests:
+      cpu: ${cpu}
+
+ingress:
+  enabled: true
+  hosts:
+    - /
+  annotations:
+    kubernetes.io/ingress.class: traefik
+
+configuration:
+  auth:
+    tokenSigningKey: "${token_signing_key}"
+    dexGrpcAddress: "${dex_api_address}"
+    dexurl: "${dex_url}"
+    dexInsecure: ${tls_insecure}
+    clientid: "${dex_client_id}"
+    clientsecret: "${dex_client_secret}"
+
+    oidc:
+      issuer: "${dex_url}"
+      insecure: ${tls_insecure}
+      clientId: "${dex_client_id}"
+      clientSecret: "${dex_client_secret}"
+
+    token:
+      signingKey: "${token_signing_key}"
+      audience: "${fqdn}"
+      issuer: "banzaicloud"
+
+  dex:
+    apiAddr: "${dex_api_address}"
+
+  cadence:
+    host: "cadence-frontend"
+    createNonexistentDomain: true
+
+  cicd:
+    url: ${cicd_url}
+    insecure: ${tls_insecure}
+
+  cloudinfo:
+    endpoint: ${cloudinfo_url}
+
+  database:
+    autoMigrate: true
+
+  cluster:
+    dns:
+      baseDomain: "" # this means auto DNS disabled (!)
+
+    backyards:
+      istio:
+        grafanaDashboardLocation: https://raw.githubusercontent.com/banzaicloud/banzai-charts/master/istio/deps/grafana/dashboards
+
+  dns:
+    domain: "example.com" # this means auto DNS disabled (!)
+
+  hooks:
+    domainHookDisabled: true
+
+  hollowtrees:
+    externalURL: ${hollowtrees_url}
+    tokenSigningKey: ${hollowtrees_token_signing_key}
+    endpoint: ${hollowtrees_url}
+
+  pipeline:
+    internalBindAddr: 0.0.0.0:9091
+    externalURL: ${external_url}
+    externalURLInsecure: ${tls_insecure}
+
+    basePath: "/pipeline"
+    internalAddr: 0.0.0.0:9091
+    external:
+      url: ${external_url}
+      insecure: ${tls_insecure}
+
+  servicemesh:
+    grafanaDashboardLocation: https://raw.githubusercontent.com/banzaicloud/banzai-charts/master/istio/deps/grafana/dashboards
+
+postgres:
+  enabled: false
+
+database:
+  driver: "${database_driver}"
+  name: "${database_name}"
+  username: "${database_username}"
+  password: "${database_password}"
+  host: "${database_host}"
+  port: "${database_port}"
+
+vault:
+  serviceAddress: "${vault_address}"
+
+resources:
+  requests:
+    cpu: ${cpu}

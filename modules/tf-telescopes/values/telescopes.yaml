@@ -1,0 +1,13 @@
+app:
+  basePath: /recommender
+  cloudInfoAddress: ${cloudinfoUrl}
+
+image:
+  tag: 0.5.2
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: traefik
+  hosts:
+    - /recommender

@@ -1,0 +1,12 @@
+server:
+  config:
+    persistence:
+      default:
+        sql:
+          connectAttributes:
+            tx_isolation: "READ-COMMITTED"
+
+      visibility:
+        sql:
+          connectAttributes:
+            tx_isolation: "READ-COMMITTED"

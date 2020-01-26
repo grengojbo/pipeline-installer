@@ -1,0 +1,12 @@
+config:
+  connectors:
+    publicGithub:
+      type: github
+      id: github
+      name: GitHub
+      config:
+        clientID: "${clientID}"
+        clientSecret: "${clientSecret}"
+        redirectURI: "${redirectURI}"
+        loadAllGroups: false
+

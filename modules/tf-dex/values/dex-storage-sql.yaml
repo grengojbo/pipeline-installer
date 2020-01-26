@@ -1,0 +1,11 @@
+config:
+  storage:
+    type: ${type}
+    config:
+      host: ${host}
+      port: ${port}
+      user: ${username}
+      password: ${password}
+      database: ${database}
+      ssl:
+        mode: "${sslmode}"

@@ -1,0 +1,7 @@
+CREATE USER 'cicd'@'%' IDENTIFIED BY '${password}';
+
+CREATE DATABASE `cicd`;
+
+GRANT ALL PRIVILEGES ON `cicd`.* TO 'cicd'@'%';
+
+FLUSH PRIVILEGES;

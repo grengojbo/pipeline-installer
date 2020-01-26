@@ -1,0 +1,7 @@
+image:
+  tag: 9.6
+
+existingSecret: ${existingSecret}
+postgresqlUsername: ${postgresqlUsername}
+postgresqlDatabase: ${postgresqlDatabase}
+initdbScriptsSecret: ${initdbScriptsSecret}

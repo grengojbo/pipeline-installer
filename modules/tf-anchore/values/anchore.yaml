@@ -1,0 +1,24 @@
+anchore-engine:
+  enabled: true
+
+postgresql:
+  enabled: false
+  postgresUser: ${database_username}
+  postgresPassword: ${database_password}
+  postgresDatabase: ${database_name}
+  externalEndpoint: ${database_host}:${database_port}
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.rule.type: PathPrefixStrip
+  apiPath: /imagecheck
+
+anchoreGlobal:
+  defaultAdminPassword: ${admin_password}
+  defaultAdminEmail: ${admin_email}
+  image: ${image_name}:${image_tag}
+
+anchoreEnterpriseUi:
+  enabled: false

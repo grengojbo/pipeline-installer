@@ -1,0 +1,23 @@
+htpsp:
+  scaler:
+    pipeline:
+      url: ${pipelineUrl}
+      skipTLSVerify: ${skipTLSVerify}
+    telescopes:
+      url: ${telescopesUrl}
+      skipTLSVerify: ${skipTLSVerify}
+    log:
+      level: debug
+promalert:
+  useJWTAuth: true
+  jwtSigningKey: ${jwtSigningKey}
+log:
+  level: debug
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - /hollowtrees-alerts

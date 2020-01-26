@@ -1,0 +1,32 @@
+cloudsql:
+  enabled: false
+
+postgresql:
+  enabled: false
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: ${ingress_class}
+  hosts:
+    - /dex
+
+config:
+  issuer: "${issuer_url}"
+  staticClients:
+  - id: ""
+    redirectURIs: []
+    name: ""
+    secret: ""
+  - name: "Banzai Cloud CLI"
+    id: "banzai-cli"
+    secret: "banzai-cli-secret"
+    public: true
+    redirectURIs:
+      - "http://localhost:5555/callback"
+
+  frontend:
+    theme: banzaicloud
+
+  oauth2:
+    skipApprovalScreen: true

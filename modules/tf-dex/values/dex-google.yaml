@@ -1,0 +1,8 @@
+config:
+  connectors:
+    google:
+      type: google
+      id: google
+      name: Google
+      config:
+        redirectURI: "${redirectURI}"

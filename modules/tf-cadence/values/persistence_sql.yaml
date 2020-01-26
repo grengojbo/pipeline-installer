@@ -1,0 +1,24 @@
+server:
+  config:
+    persistence:
+      default:
+        driver: "sql"
+
+        sql:
+          driver: "${driver}"
+          host: "${host}"
+          port: ${port}
+          database: "${cadence_database}"
+          user: "${user}"
+          password: "${password}"
+
+      visibility:
+        driver: "sql"
+
+        sql:
+          driver: "${driver}"
+          host: "${host}"
+          port: ${port}
+          database: "${cadence_visibility_database}"
+          user: "${user}"
+          password: "${password}"

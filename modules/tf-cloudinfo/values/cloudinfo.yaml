@@ -1,0 +1,36 @@
+frontend:
+  ingress:
+    enabled: true
+    hosts:
+      - /cloudinfo
+    annotations:
+      kubernetes.io/ingress.class: traefik
+
+app:
+  basePath: /cloudinfo
+  vault:
+    enabled: true
+    address: "${vaultAddress}?role=cloudinfo"
+    secretPath: "/secret/data/apps/cloudinfo"
+
+redis:
+  enabled: true
+  usePassword: false
+  redisPort: 6379
+  cluster:
+    enabled: false
+  securityContext:
+    enabled: true
+    runAsUser: 0
+    fsGroup: 2000
+
+store:
+  redis:
+    enabled: true
+
+metrics:
+  enabled: false
+  serviceMonitor:
+    enabled: false
+
+serviceAccountName: cloudinfo

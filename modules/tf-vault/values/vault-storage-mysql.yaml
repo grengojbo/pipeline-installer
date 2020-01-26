@@ -1,0 +1,8 @@
+vault:
+  config:
+    storage:
+      mysql:
+        database: ${database_name}
+        address: ${database_host}:${database_port}
+        username: ${database_username}
+        password: ${database_password}

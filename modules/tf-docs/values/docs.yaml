@@ -1,0 +1,17 @@
+image:
+  pullPolicy: ${image_pull_policy}
+  tag: ${image_tag}
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: traefik
+  hosts:
+    - /docs
+
+deploymentAnnotations:
+  keel.sh/notify: "${keel_notify}"
+deploymentLabels:
+  keel.sh/policy: "${keel_policy}"
+  keel.sh/trigger: "${keel_trigger}"
+  keel.sh/approvals: "${keel_approvals}"

@@ -1,0 +1,7 @@
+CREATE USER anchore WITH ENCRYPTED PASSWORD '${password}';
+
+CREATE DATABASE anchore;
+
+\c anchore
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO anchore;

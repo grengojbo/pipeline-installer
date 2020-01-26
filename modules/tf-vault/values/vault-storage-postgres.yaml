@@ -1,0 +1,5 @@
+vault:
+  config:
+    storage:
+      postgresql:
+        connection_url: "postgres://${database_username}:${database_password}@${database_host}:${database_port}/${database_name}?sslmode=disable"

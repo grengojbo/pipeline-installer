@@ -1,0 +1,18 @@
+server:
+  config:
+    persistence:
+      default:
+        driver: "cassandra"
+
+        cassandra:
+          hosts: "${hosts}"
+          port: ${port}
+          keyspace: "${cadence_keyspace}"
+
+      visibility:
+        driver: "cassandra"
+
+        cassandra:
+          hosts: "${hosts}"
+          port: ${port}
+          keyspace: "${cadence_visibility_keyspace}"

@@ -1,0 +1,91 @@
+vault:
+  externalConfig:
+    policies:
+      - name: allow_accesstokens_and_orgs
+        rules: path "secret/data/accesstokens/*" {
+                capabilities = ["create", "read", "update"]
+              }
+              path "leaderelection/data/orgs/*" {
+                capabilities = ["create", "read", "update"]
+              }
+              path "leaderelection/metadata/orgs/*" {
+                capabilities = ["create", "read", "update", "delete", "list"]
+              }
+              path "secret/metadata/accesstokens/*" {
+                capabilities = ["delete", "list"]
+              }
+              path "secret/data/orgs/*" {
+                capabilities = ["create", "read", "update"]
+              }
+              path "secret/metadata/orgs/*" {
+                capabilities = ["delete", "list"]
+              }
+              path "secret/data/banzaicloud/*" {
+                capabilities = ["create", "read"]
+              }
+              path "secret/metadata/banzaicloud/*" {
+                capabilities = ["list"]
+              }
+              path "clusters/*" {
+                capabilities = ["delete", "list", "create", "read", "update"]
+              }
+              path "sys/mounts/*" {
+                capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+              }
+              path "sys/policies/acl/*" {
+                capabilities = ["delete", "create", "update"]
+              }
+              path "sys/auth" {
+                capabilities = ["read", "list"]
+              }
+              path "sys/auth/kubernetes-cluster/*" {
+                capabilities = ["create", "update", "sudo", "delete"]
+              }
+              path "auth/kubernetes-cluster/*" {
+                capabilities = ["create", "update", "delete"]
+              }
+      - name: cloudinfo
+        rules: path "secret/data/apps/cloudinfo" {
+                capabilities = ["read"]
+              }
+
+
+    auth:
+      - type: kubernetes
+        # Allows creating roles in Vault which can be used later on for the Kubernetes based
+        # authentication.
+        # See https://www.vaultproject.io/docs/auth/kubernetes.html#creating-a-role for
+        # more information.
+        roles:
+          # Allow pipeline pod in the all namespaces to use the secret kv store
+          - name: pipeline
+            bound_service_account_names: pipeline
+            bound_service_account_namespaces: "${namespace}"
+            policies: allow_accesstokens_and_orgs
+            ttl: 1h
+          - name: cloudinfo
+            bound_service_account_names: cloudinfo
+            bound_service_account_namespaces: "${namespace}"
+            policies: cloudinfo
+            ttl: 1h
+    secrets:
+      - path: secret
+        type: kv
+        description: General secrets.
+        options:
+          version: 2
+statsd:
+  metrics:
+    enabled: true
+
+unsealer:
+  metrics:
+    enabled: true
+  args: [
+      "--mode",
+      "k8s",
+      "--k8s-secret-namespace",
+      "${namespace}",
+      "--k8s-secret-name",
+      "bank-vaults"
+  ]

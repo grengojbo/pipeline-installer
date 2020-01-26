@@ -1,0 +1,36 @@
+accessLogs:
+  enabled: ${accessLogsEnabled}
+  format: "${accessLogsFormat}"
+kubernetes:
+  ingressClass: "${ingressClass}"
+  ingressEndpoint:
+    useDefaultPublishedService: true
+  namespaces: ${join("", formatlist("\n  - %s", compact(split(",", kubernetesNamespaces))))}
+loadBalancerIP: "${loadBalancerIP}"
+acme:
+  enabled: ${acmeEnabled}
+  challengeType: "tls-alpn-01"
+  staging: false
+  email: "${acmeEmail}"
+  persistence:
+    enabled: "${acmePersistenceEnabled}"
+    existingClaim: "${acmePersistenceExistingClaim}"
+ssl:
+  enabled: true
+  enforced: ${sslEnforced}
+  insecureSkipVerify: true
+  defaultCert: "${defaultCert}"
+  defaultKey: "${defaultKey}"
+  defaultCN: "${defaultCN}"
+  generateTLS: ${generateTLS}
+rbac:
+  enabled: true
+cpuRequest: 100m
+memoryRequest: 20Mi
+cpuLimit: 400m
+memoryLimit: 500Mi
+serviceType: "${serviceType}"
+deployment:
+  hostPort:
+    httpEnabled: ${hostPortEnabled}
+    httpsEnabled: ${hostPortEnabled}

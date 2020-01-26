@@ -1,0 +1,11 @@
+imageTag: 5.7.20
+
+extraVolumeMounts: |
+  - name: migrations-custom
+    mountPath: /docker-entrypoint-initdb.d
+
+extraVolumes: |
+  - name: migrations-custom
+    secret:
+      secretName: ${initializationFilesSecret}
+
