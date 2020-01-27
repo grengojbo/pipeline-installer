@@ -50,9 +50,12 @@ terraform-apply: terraform-init ## Run terraform apply
 db-init-postgresql: ## Initialize PostgreSQL DataBase
 	@echo "\nYour selected workspace is '${WORKSPACE}'\n"
 
+build: ## Build Docker image ${IMAGE}:${TAG}
+	docker build -t ${IMAGE}:${TAG} .
+
 pull: ## Docker image pull ${IMAGE}:${TAG}
 	docker pull ${IMAGE}:${TAG}
 
-shell: pull ## Run Local end connect to shell
+shell: ## Run Local end connect to shell
 	@echo "\nYour selected workspace is '${WORKSPACE}'\nCureent DIR ${PROJECT_DIR}\n"
 	docker run --rm --net=host --user=${UID} -ti -v ${HOME}/.banzai/pipeline/${WORKSPACE}:/workspace -v ${PROJECT_DIR}:/terraform -e KUBECONFIG  sh
