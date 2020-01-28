@@ -1,33 +1,47 @@
-data "template_file" "anchore-postgres" {
-  template = "${file("${path.module}/sql/postgres/anchore.sql")}"
 
-  vars = {
-    password = "${random_string.anchore-db-password.result}"
-  }
+resource "local_file" "postgres_anchore_sql" {
+  count = 1
+  content = templatefile("${path.module}/sql/postgres/anchore.sql", {
+    password = random_string.anchore-db-password.result
+    }
+  )
+  filename = "${path.module}/tmp/anchore.sql"
 }
 
-data "template_file" "cicd-postgres" {
-  template = "${file("${path.module}/sql/postgres/cicd.sql")}"
-
-  vars = {
-    password = "${random_string.cicd-db-password.result}"
-  }
+resource "local_file" "postgres_cicd_sql" {
+  count = 1
+  content = templatefile("${path.module}/sql/postgres/cicd.sql", {
+    password = random_string.cicd-db-password.result
+    }
+  )
+  filename = "${path.module}/tmp/cicd.sql"
 }
 
-data "template_file" "dex-postgres" {
-  template = "${file("${path.module}/sql/postgres/dex.sql")}"
-
-  vars = {
-    password = "${random_string.dex-db-password.result}"
-  }
+resource "local_file" "postgres_dex_sql" {
+  count = 1
+  content = templatefile("${path.module}/sql/postgres/dex.sql", {
+    password = random_string.dex-db-password.result
+    }
+  )
+  filename = "${path.module}/tmp/dex.sql"
 }
 
-data "template_file" "pipeline-postgres" {
-  template = "${file("${path.module}/sql/postgres/pipeline.sql")}"
+resource "local_file" "postgres_pipeline_sql" {
+  count = 1
+  content = templatefile("${path.module}/sql/postgres/pipeline.sql", {
+    password = random_string.pipeline-db-password.result
+    }
+  )
+  filename = "${path.module}/tmp/pipeline.sql"
+}
 
-  vars = {
-    password = "${random_string.pipeline-db-password.result}"
-  }
+resource "local_file" "postgres_vault_sql" {
+  count = 1
+  content = templatefile("${path.module}/sql/postgres/vault.sql", {
+    password = random_string.vault-db-password.result
+    }
+  )
+  filename = "${path.module}/tmp/vault.sql"
 }
 
 data "template_file" "vault-postgres" {
@@ -74,20 +88,71 @@ data "template_file" "vault-mysql" {
   template = "${file("${path.module}/sql/mysql/vault.sql")}"
 
   vars = {
-    password = "${random_string.vault-db-password.result}"
+    password = random_string.vault-db-password.result
   }
 }
 
-# resource "null_resource" "db_init" {
-#   count   = local.rootDatabaseHost ? 1 : 0
-#   provisioner "local-exec" {
-#     command = "psql -h $RDS_DB_HOST -U $DB_USER -f "
+resource "null_resource" "db_init_anchore" {
+  count   = local.externalDatabase ? 1 : 0
+  provisioner "local-exec" {
+    command = "psql -h ${local.rootDatabaseHost} -U ${local.rootDatabaseUser} -f ${path.module}/tmp/anchore.sql"
+    environment = {
+      PGPASSWORD = local.rootDatabasePassword
+    }
+  }
+  depends_on = [local_file.postgres_anchore_sql]
+}
 
-#     environment = {
-#       PGPASSWORD = local.rootDatabasePassword
-#       RDS_DB_HOST = local.rootDatabaseHost
-#       DB_USER = local.rootDatabaseUser
-#       SQL_FILE = data.template_file.vault-postgres
-#     }
-#   }
-# }
+resource "null_resource" "db_init_cicd" {
+  count   = local.externalDatabase ? 1 : 0
+  provisioner "local-exec" {
+    command = "psql -h ${local.rootDatabaseHost} -U ${local.rootDatabaseUser} -f ${path.module}/tmp/cicd.sql"
+    environment = {
+      PGPASSWORD = local.rootDatabasePassword
+    }
+  }
+  depends_on = [local_file.postgres_cicd_sql]
+}
+
+resource "null_resource" "db_init_dex" {
+  count   = local.externalDatabase ? 1 : 0
+  provisioner "local-exec" {
+    command = "psql -h ${local.rootDatabaseHost} -U ${local.rootDatabaseUser} -f ${path.module}/tmp/dex.sql"
+    environment = {
+      PGPASSWORD = local.rootDatabasePassword
+    }
+  }
+  depends_on = [local_file.postgres_dex_sql]
+}
+
+resource "null_resource" "db_init_pipeline" {
+  count   = local.externalDatabase ? 1 : 0
+  
+  provisioner "local-exec" {
+    command = "psql -h ${local.rootDatabaseHost} -U ${local.rootDatabaseUser} -f ${path.module}/tmp/pipeline.sql"
+    environment = {
+      PGPASSWORD = local.rootDatabasePassword
+    }
+  }
+  
+  provisioner "local-exec" {
+    when    = "destroy"
+    command = "psql -h ${local.rootDatabaseHost} -U ${local.rootDatabaseUser} -f ${path.module}/sql/postgres/drop.sql"
+    environment = {
+      PGPASSWORD = local.rootDatabasePassword
+    }
+  }
+  
+  depends_on = [local_file.postgres_pipeline_sql]
+}
+
+resource "null_resource" "db_init_vault" {
+  count   = local.externalDatabase ? 1 : 0
+  provisioner "local-exec" {
+    command = "psql -h ${local.rootDatabaseHost} -U ${local.rootDatabaseUser} -f ${path.module}/tmp/vault.sql"
+    environment = {
+      PGPASSWORD = local.rootDatabasePassword
+    }
+  }
+  depends_on = [local_file.postgres_vault_sql]
+}

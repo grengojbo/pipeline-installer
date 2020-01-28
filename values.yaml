@@ -1,0 +1,12 @@
+defaultStorageBackend: postgres
+externalHost: cloud.iwis.io
+ingressHostPort: false
+installer:
+  image: banzaicloud/pipeline-installer@sha256:8f292355015f412eb6ec85c82c92374c80b324f213786eea6f4a60c031e3d021
+provider: k8s
+providerConfig: {}
+tlsInsecure: false
+uuid: 495d85e1-e3de-4a8a-9e9a-eabf927590e5
+externalDatabase: true
+rootDatabaseHost: pg-aws.cv149gbgrsnf.eu-central-1.rds.amazonaws.com
+rootDatabasePassword: dD3f3HE2fsgDs54

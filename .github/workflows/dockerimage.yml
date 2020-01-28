@@ -1,23 +1,32 @@
 name: Docker Image CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
     # https://github.com/marketplace/actions/publish-docker
     - name: Define variables
       run: |
            echo "::set-env name=APP_RELEASE::$(cat VERSION)"
+           echo "::set-env name=BUILD_DATE::$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
       shell: bash
+    #  VCS_REF=git rev-parse --short HEAD
+    # https://github.com/elgohr/Publish-Docker-Github-Action
     - uses: elgohr/Publish-Docker-Github-Action@master
+      env:
+        HELM_VERSION: 3.0.2
+        KUBERNETES_VERSION: 1.17.2
+        VCS_REF: ${{ github.head_ref }}
+        BUILD_DATE: ${{ env.BUILD_DATE }}
       with:
         name: ${{ github.repository }}
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         tags: "latest,${{ env.APP_RELEASE }}"
+        buildargs: HELM_VERSION,KUBERNETES_VERSION,BUILD_DATE

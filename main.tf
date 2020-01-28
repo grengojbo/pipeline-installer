@@ -40,9 +40,11 @@ locals {
 
   hasTelescopes = lookup(lookup(local.values, "telescopes", {}), "enabled", "false")
   hasCloudinfo  = lookup(lookup(local.values, "cloudinfo", {}), "enabled", "false")
+  hasTiller  = lookup(local.values, "tiller", "false")
 
   defaultStorageBackend = lookup(local.values, "defaultStorageBackend", "postgres")
   
+  externalDatabase = lookup(local.values, "externalDatabase", "false")
   rootDatabaseHost = lookup(local.values, "rootDatabaseHost", "none")
   rootDatabasePassword = lookup(local.values, "rootDatabasePassword", "root")
   rootDatabaseUser = lookup(local.values, "rootDatabaseUser", "postgres")
